@@ -1,0 +1,24 @@
+{
+  "name": "myexpressserver",
+  "version": "1.0.0",
+  "description": "expressserver",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TowhidAust/myExpressServer.git"
+  },
+  "author": "Towhid",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TowhidAust/myExpressServer/issues"
+  },
+  "homepage": "https://github.com/TowhidAust/myExpressServer#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.6"
+  }
+}
