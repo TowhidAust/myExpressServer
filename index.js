@@ -29,7 +29,6 @@ app.use(cors({
 }));
 
 var jsonParser = bodyParser.json();
-
 app.use(jsonParser);
 
 app.get('/', (req, res) => {
@@ -37,34 +36,72 @@ app.get('/', (req, res) => {
 });
 
 
-
+// fetch products
 app.get('/products', function (req, res) {
+    console.log('product fetched');
     database.ref('/Products').once("value").then((snapshot) => {
-        
-        res.send(snapshot.val());
+        if (snapshot.val()) {
+            res.send(snapshot.val());
+        }
+        res.send({msg: "undefined"});
     })
 });
 
-
+// fetch cart
 app.get('/cart', function (req, res) {
     database.ref('/Cart').once("value").then((snapshot) => {
-        res.send(snapshot.val());
+        if (snapshot.val()) {
+            res.send(snapshot.val());
+        } else {
+            res.send({ msg: "no cart data" });
+        }
     });
 });
 
+
+// add product to cart
 app.post('/addToCart', function (req, res) {
     let data = req.body;
-    console.log(data);
-
-        // add this data to the database
-        // database.ref('/Cart/chosenProducts').push(data).then((snapshot) => {
-        //     database.ref('/Cart').update({quantity: this.state.quantity}).then((snapshot) => {
-        //         console.log('added into cart on db');
-        //     });
-        // });
+    // add this data to the database
+    database.ref('/Cart/chosenProducts').push(data).then((snapshot) => {
+        res.send({ "success": "added product into cart database" });
+    });
     
-    res.send({"user": "user__"});
-})
+});
+
+// after clicking minus button remove that particular data from db
+app.post('/removeSingleDataFromCart', function (req, res) {
+    let data = req.body;
+    // add this data to the database
+    database.ref('/Cart/chosenProducts').once("value").then((snapshot) => {
+        // console.log("snapshot val", snapshot.val());
+        let chosenProductsJson = snapshot.val();
+        res.send(chosenProductsJson);
+        
+    })
+
+});
+
+// add quantity to cart
+app.post('/addQuantityToCart', function (req, res) {
+    let data = req.body;
+    // add this data to the database
+    database.ref('/Cart').update(data).then((snapshot) => {
+        res.send({ "success": "added quantity into cart database" });
+    });
+
+});
+
+
+// add addTotalAmount to cart
+app.post('/addTotalAmount', function (req, res) {
+    let data = req.body;
+    // add this data to the database
+    database.ref('/Cart').update(data).then((snapshot) => {
+        res.send({ "success": "added quantity into cart database" });
+    });
+
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
