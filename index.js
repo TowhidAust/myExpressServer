@@ -40,11 +40,14 @@ app.get('/', (req, res) => {
 app.get('/products', function (req, res) {
     console.log('product fetched');
     database.ref('/Products').once("value").then((snapshot) => {
+        console.log(snapshot.val());
         if (snapshot.val()) {
             res.send(snapshot.val());
-        }
-        res.send({msg: "undefined"});
-    })
+        } else { res.send({ 'msg': "undefined" }); }
+    }).catch(err => {
+        console.log(err.code);
+        res.send({ "err": err.code });
+    });
 });
 
 // fetch cart
@@ -55,6 +58,8 @@ app.get('/cart', function (req, res) {
         } else {
             res.send({ msg: "no cart data" });
         }
+    }).catch(err => {
+        console.log(err.code);
     });
 });
 
@@ -74,9 +79,19 @@ app.post('/removeSingleDataFromCart', function (req, res) {
     let data = req.body;
     // add this data to the database
     database.ref('/Cart/chosenProducts').once("value").then((snapshot) => {
-        // console.log("snapshot val", snapshot.val());
         let chosenProductsJson = snapshot.val();
-        res.send(chosenProductsJson);
+        for (let key in chosenProductsJson) {
+            let productId = chosenProductsJson[key]['_id'];
+            if (data.productId === productId) {
+
+                console.log("data.product id", data.productId);
+                console.log("data.product id", productId);
+                database.ref(`Cart/chosenProducts/${key}`).remove().then((snapshot) => {
+                    res.send({ "msg": "removed 1 product from db" });
+                });
+                return false;
+            }
+        }
         
     })
 
