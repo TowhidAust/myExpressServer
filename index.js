@@ -7,11 +7,14 @@ var bodyParser = require('body-parser');
 
 
 
-
+// allow the origins here.
 let allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5000',
     'http://localhost:8080',
+    'http://localhost:8081',
+    'http://localhost:443',
+
 ]
 // Configuring cross origin resource sharing
 app.use(cors({
@@ -62,7 +65,6 @@ app.get('/cart', function (req, res) {
         console.log(err.code);
     });
 });
-
 
 // add product to cart
 app.post('/addToCart', function (req, res) {
