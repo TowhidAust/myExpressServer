@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 // allow the origins here.
 let allowedOrigins = [
     'http://localhost:3000',
+    'http://localhost:3001',
     'http://localhost:5000',
     'http://localhost:8080',
     'http://localhost:8081',
